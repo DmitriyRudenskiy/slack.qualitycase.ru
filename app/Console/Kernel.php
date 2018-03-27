@@ -2,6 +2,9 @@
 
 namespace App\Console;
 
+use App\Console\Commands\ImportFromDirectMessage;
+use App\Console\Commands\ImportMembers;
+use App\Console\Commands\LoadMessage;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -13,7 +16,9 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        //
+        ImportMembers::class,
+        LoadMessage::class,
+        ImportFromDirectMessage::class
     ];
 
     /**

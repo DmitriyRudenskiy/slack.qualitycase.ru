@@ -1,16 +1,22 @@
 <?php
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
-
 Route::get('/', function () {
-    return view('welcome');
+    $users = \App\Models\Members::where("chanel_id", "<>", null)->get();
+
+    return view('hello', ['users' => $users]);
+});
+
+Route::get('/{userId}', function ($userId) {
+    $user = \App\Models\Members::where("id", $userId)->first();
+    $users = \App\Models\Members::where("chanel_id", "<>", null)->get();
+    $message = \App\Models\Messages::where("user_id", $userId)->orderBy("added_on")->get();
+
+    return view(
+        'hello',
+        [
+            'user' => $user,
+            'users' => $users,
+            'message' => $message
+        ]
+    );
 });
