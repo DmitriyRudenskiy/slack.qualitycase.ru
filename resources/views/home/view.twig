@@ -1,0 +1,20 @@
+{% extends "layouts.app" %}
+
+{% block title %}Список пользователей{% endblock %}
+
+{% block content %}
+    <nav aria-label="Page navigation example">
+        {{ message.links('vendor.pagination.bootstrap4') | raw }}
+    </nav>
+    {% for item in message %}
+        <div>
+            <p class="text-right">
+                <span class="badge badge-success">{{ item.user_id }}</span><br>
+                {{ item.added_on |date("H:i d.m.y")}}
+            </p>
+            <p style="padding-left: 30%">{{ item.description }}</p>
+        </div>
+    {% endfor %}
+
+
+{% endblock %}

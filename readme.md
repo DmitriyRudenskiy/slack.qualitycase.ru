@@ -1,5 +1,5 @@
 # Запуск сервера
-docker start
+docker start work-mysql
 docker run -it \
     --link  work-mysql:db \
     -p 9300:9300 \
@@ -7,6 +7,15 @@ docker run -it \
     -w '/var/www/slack.qualitycase.ru' \
     --rm php:5.6-cli-alpine sh
 
+# Подготовка сервера
+apk update
+apk add php5-mcrypt
+apk add php5-pdo_mysql
+
+echo 'extension=/usr/lib/php5/modules/mcrypt.so' >> /usr/local/etc/php/php.ini
+echo 'extension=/usr/lib/php5/modules/pdo_mysql.so' >> /usr/local/etc/php/php.ini
+
+#Запуск сервера
 php -S 0.0.0.0:9300 -t public/
 
 # Ипортируем список пользователей
