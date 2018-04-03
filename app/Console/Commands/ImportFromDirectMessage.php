@@ -27,117 +27,67 @@ class ImportFromDirectMessage extends Command
      */
     public function handle()
     {
-        $users = $this->getListUsers();
+        $members = Members::where("is_master", false)->get();
 
-        foreach ($users as $value) {
-            $this->info("Load message for user: " . $value);
+        foreach ($members as $value) {
             $this->getMessages($value);
         }
+
+        $this->info("Finish");
     }
 
-    protected function getListUsers()
+    /**
+     * @param Members $members
+     */
+    protected function getMessages(Members $members)
     {
-        /*
-        return [
-            //0 => "USLACKBOT",
-            1 => "U94H68GJ0",
-            2 => "U94S8M3QQ",
-            3 => "U95EF8G03",
-            4 => "U9606TPMY",
-            5 => "U966PTWD9",
-            6 => "U96DDMSRJ",
-            7 => "U96H2HS4A",
-            8 => "U96KHGXF0",
-            9 => "U974M969G",
-            10 => "U97ALMHFS",
-            11 => "U97PA7DLK",
-            12 => "U99DS6W6N",
-            13 => "U99UE3G5P",
-            14 => "U9AURAG1E",
-            15 => "U9B19DC9H",
-            16 => "U9BPX5JCE"
-        ];
+        $this->info("Load message for user: " . $members->name);
 
-        $url = "https://slack.com/api/im.list?token=" . env("SLACK_TOKEN") . "&pretty=1";
+        // номер чата для общения с пользователем
+        $apiClient = new Client();
+        $channelId = $apiClient->getChannel($members->slack_id);
 
-        $json = json_decode(file_get_contents($url));
+        $this->info("Find chanel: " . $channelId);
 
-        $data = array_map(function($value) {
-            return $value->user;
-        }, (array)$json->ims);
+        // сообщение
+        $messages = $apiClient->getMessageFromChannel($channelId);
 
-        return $data;
-        */
+        $this->info("Load all message: " . sizeof($messages));
 
-        $result = [];
-
-        $list = Members::where("chanel_id", "<>", null)->get();
-
-        foreach ($list as $value) {
-            $result[] = $value->slack_id;
+        foreach ($messages as $value) {
+            $this->add($members->id, $value);
         }
-
-        return $result;
     }
 
-    protected function getChannel($user)
+    /**
+     * @param string $channelMemberId
+     * @param $message
+     */
+    protected function add($channelMemberId, $message)
     {
-        $url = sprintf(
-            "https://slack.com/api/im.open?token=%s&user=%s&pretty=1",
-            env("SLACK_TOKEN"),
-            $user
-        );
+        $userId = $this->getUser($message->user);
+        $createAt = new \DateTime();
+        $createAt->setTimestamp(((int)$message->ts));
 
-        $json = json_decode(file_get_contents($url));
-        sleep(3);
+        $model = Messages::where("channel_member_id", $channelMemberId)
+            ->where("member_id", $userId)
+            ->where("added_on", $createAt)
+            ->first();
 
-        if (empty($json->channel->id)) {
-            $this->error(__METHOD__);
-            dd($json);
-        }
-
-        return $json->channel->id;
-    }
-
-    protected function getMessages($user)
-    {
-        $channel = $this->getChannel($user);
-
-        $url = sprintf(
-            "https://slack.com/api/im.history?token=%s&channel=%s&count=1000&pretty=1",
-            env("SLACK_TOKEN"),
-            $channel
-        );
-
-        $json = json_decode(file_get_contents($url));
-        sleep(3);
-
-        if (empty($json->messages)) {
-            $this->error(__METHOD__);
-            dd($url);
-        }
-
-        foreach ($json->messages as $value) {
-            $userId = $this->getUser($value->user);
-            $createAt = new \DateTime();
-            $createAt->setTimestamp(((int)$value->ts));
-
-            $message = Messages::where("channel_id", $channel)
-                ->where("user_id", $userId)
-                ->where("added_on", $createAt)
-                ->first();
-
-            if ($message === null) {
-                $message = new Messages();
-                $message->channel_id = $channel;
-                $message->user_id = $userId;
-                $message->added_on = $createAt;
-                $message->description = $value->text;
-                $message->save();
-            }
+        if ($model === null) {
+            $model = new Messages();
+            $model->channel_member_id = $channelMemberId;
+            $model->member_id = $userId;
+            $model->added_on = $createAt;
+            $model->description = $message->text;
+            $model->save();
         }
     }
 
+    /**
+     * @param string $slackId
+     * @return integer
+     */
     public function getUser($slackId)
     {
         if (!empty($this->users[$slackId])) {

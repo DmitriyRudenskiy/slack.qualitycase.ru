@@ -21,6 +21,9 @@ php -S 0.0.0.0:9300 -t public/
 # Ипортируем список пользователей
 php artisan import:members --filename=users.json
 
+# Загружаем сообщения
+php artisan load:direct:message
+
 # База данных
 php artisan make:migration create_members_table --create=members
 php artisan make:migration create_channels_table --create=channels
@@ -37,6 +40,9 @@ https://slack.com/api/conversations.members?token=xoxp-310706314629-315468234226
         "next_cursor": ""
     }
 }
+
+# список пользователей
+https://slack.com/api/im.list?token=" . env("SLACK_TOKEN") . "&pretty=1
 
 #Список личных сообщений
 - Перечисляет прямые каналы сообщений для вызывающего пользователя.

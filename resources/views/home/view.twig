@@ -3,18 +3,33 @@
 {% block title %}Список пользователей{% endblock %}
 
 {% block content %}
+    <style>
+        .__message_date {
+            color: #ccc;
+            font-size: 70%;
+        }
+
+        .alert {
+            margin-bottom: 24px;
+            padding-bottom: 0;
+        }
+    </style>
+
     <nav aria-label="Page navigation example">
         {{ message.links('vendor.pagination.bootstrap4') | raw }}
     </nav>
+
     {% for item in message %}
-        <div>
-            <p class="text-right">
-                <span class="badge badge-success">{{ item.user_id }}</span><br>
-                {{ item.added_on |date("H:i d.m.y")}}
-            </p>
-            <p style="padding-left: 30%">{{ item.description }}</p>
-        </div>
+        {% if item.member.is_master %}
+            <p style="margin: 0; padding: 0; line-height: 1;">{{ item.member.name }} <span class="__message_date">{{ item.added_on | date("H:i d.m.y")}}</span></p>
+            <div class="alert alert-primary" role="alert" style="margin-right: 20%">
+                <p>{{ item.description }}</p>
+            </div>
+        {% else %}
+            <p class="text-right" style="margin: 0; padding: 0; line-height: 1;">{{ item.member.name }} <span class="__message_date">{{ item.added_on | date("H:i d.m.y")}}</span></p>
+            <div class="alert alert-success" role="alert" style="margin-left: 20%">
+                <p>{{ item.description }}</p>
+            </div>
+        {% endif %}
     {% endfor %}
-
-
 {% endblock %}

@@ -64,16 +64,14 @@ class LoadMessage extends Command
             $createAt->setTimestamp(((int)$value->ts));
 
             $message = Messages::where("channel_id", $channel->id)
-                ->where("user_id", $userId)
+                ->where("member_id", $userId)
                 ->where("added_on", $createAt)
                 ->first();
 
             if ($message === null) {
-                $this->info($userId);
-
                 $message = new Messages();
                 $message->channel_id = $channel->id;
-                $message->user_id = $userId;
+                $message->member_id = $userId;
                 $message->added_on = $createAt;
                 $message->description = $value->text;
                 $message->save();

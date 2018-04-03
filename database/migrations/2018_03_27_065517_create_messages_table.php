@@ -15,10 +15,13 @@ class CreateMessagesTable extends Migration
     {
         Schema::create('messages', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('channel_id')->unsigned();
-            $table->integer('user_id')->unsigned();
+            $table->integer('channel_member_id')->unsigned();
+            $table->integer('member_id')->unsigned();
             $table->text('description');
             $table->timestamp('added_on');
+
+            $table->foreign('channel_member_id')->references('id')->on('members');
+            $table->foreign('member_id')->references('id')->on('members');
         });
     }
 

@@ -15,11 +15,9 @@ class CreateMembersTable extends Migration
     {
         Schema::create('members', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('chanel_id')->unsigned()->nullable();
-            $table->string('slack_id')->unique();;
-            $table->string('slack_name');
-            $table->string('name')->nullable();
-            $table->timestamps();
+            $table->boolean('is_master')->default(false);
+            $table->string('slack_id')->unique();
+            $table->string('name');
         });
     }
 
