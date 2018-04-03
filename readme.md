@@ -30,7 +30,7 @@ php artisan make:migration create_channels_table --create=channels
 php artisan make:migration create_messages_table --create=messages
 
 # Список пользователей
-https://slack.com/api/conversations.members?token=xoxp-310706314629-315468234226-337432270294-f16323c3c4865fc86c59088efe63c924&channel=C93THQMMW&pretty=1
+https://slack.com/api/conversations.members?token=xoxp-&channel=C93THQMMW&pretty=1
 
 {
     "ok": true,
@@ -46,13 +46,13 @@ https://slack.com/api/im.list?token=" . env("SLACK_TOKEN") . "&pretty=1
 
 #Список личных сообщений
 - Перечисляет прямые каналы сообщений для вызывающего пользователя.
-https://slack.com/api/im.list?token=xoxp-310706314629-315468234226-337432270294-f16323c3c4865fc86c59088efe63c924&pretty=1
+https://slack.com/api/im.list?token=xoxp-&pretty=1
 
 # Открываем канал
-https://slack.com/api/im.open?token=xoxp-310706314629-315468234226-337432270294-f16323c3c4865fc86c59088efe63c924&user=U94H68GJ0&pretty=1
+https://slack.com/api/im.open?token=xoxp-&user=U94H68GJ0&pretty=1
 
 # Читаем сообщения
-https://slack.com/api/im.history?token=xoxp-310706314629-315468234226-337432270294-f16323c3c4865fc86c59088efe63c924&channel=D9FH2ES95&count=1000&pretty=1
+https://slack.com/api/im.history?token=xoxp-&channel=D9FH2ES95&count=1000&pretty=1
 
 ### Тут получаем токен
 https://api.slack.com/custom-integrations/legacy-tokens
