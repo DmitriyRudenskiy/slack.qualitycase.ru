@@ -23,37 +23,6 @@ https://slack.com/api/conversations.members?token=xoxp-310706314629-315468234226
 {
     "ok": true,
     "members": [
-        "U94H68GJ0",
-        "U94LS98MT",
-        "U94S8M3QQ",
-        "U95EF8G03",
-        "U95UXAU72",
-        "U95V9AC3C",
-        "U9606TPMY",
-        "U966PTWD9",
-        "U96DDMSRJ",
-        "U96E0MBV2",
-        "U96H2HS4A",
-        "U96KHGXF0",
-        "U96UTSQPR",
-        "U974M969G",
-        "U97ALMHFS",
-        "U97JPGWMU",
-        "U97PA7DLK",
-        "U97REFYET",
-        "U989GL3RQ",
-        "U98SXKWJD",
-        "U993BJ2MP",
-        "U997MBF0W",
-        "U99DS6W6N",
-        "U99E1C092",
-        "U99E9Q2P2",
-        "U99JAC8SD",
-        "U99UE3G5P",
-        "U9AURAG1E",
-        "U9B19DC9H",
-        "U9BPX5JCE",
-        "U9GFZQXD4"
     ],
     "response_metadata": {
         "next_cursor": ""
@@ -69,3 +38,6 @@ https://slack.com/api/im.open?token=xoxp-310706314629-315468234226-337432270294-
 
 # Читаем сообщения
 https://slack.com/api/im.history?token=xoxp-310706314629-315468234226-337432270294-f16323c3c4865fc86c59088efe63c924&channel=D9FH2ES95&count=1000&pretty=1
+
+### Тут получаем токен
+https://api.slack.com/custom-integrations/legacy-tokens
