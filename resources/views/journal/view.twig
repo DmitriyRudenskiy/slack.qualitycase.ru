@@ -1,0 +1,119 @@
+{% extends "layouts.core" %}
+
+{% block title %}Оценки за домашние работы и выпускные проекты{% endblock %}
+
+{% block content %}
+    <style>
+        .start_image {
+            width: 48px;
+            height: 48px;
+        }
+
+        #clock {
+            display: block;
+            padding: 12px;
+            border: 1px solid green;
+            text-align: center;
+            font-size: 24px;
+        }
+
+        .success {
+            background: #4cd137;
+        }
+
+        .danger {
+            background: #e84118;
+        }
+
+    </style>
+
+    <div class="jumbotron">
+        <h3>Студент: {{ student.first_name }} {{ student.last_name }}</h3>
+        2 из 6
+        <div class="progress">
+            <div class="progress-bar" role="progressbar" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
+                35%
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-2"></div>
+        <div class="col-lg-8">
+            <table class="table">
+                <tbody>
+                {% for item in homeworks %}
+                    {% if item.is_finish < 1 and item.rating < 1 %}
+                        <tr class="danger">
+                            <td class="text-left">
+                                <img class="start_image" src="/img/sign-error.svg" alt="Работа не сдана">
+                            </td>
+                            <td>
+                                {% if item.is_homework %}
+                                    <h5>Домашняя работа №{{ item.number }}</h5>
+                                {% else %}
+                                    <h5>Выпускной проект №{{ item.number }}</h5>
+                                {% endif %}
+                                <p>&laquo;{{ item.title }}&raquo;</p>
+                            </td>
+                        </tr>
+                        {% elseif item.rating > 0 %}
+                            <tr class="success">
+                                <td class="text-left">
+                                    12345 - {{ item.rating }}
+                                    {% for value in range(1, item.rating) %}
+                                    <img class="start_image" src="/img/star.svg" alt="{{ value }}">
+                                    {% endfor %}
+                                </td>
+                                <td>
+                                    {% if item.is_homework %}
+                                        <h5>Домашняя работа №{{ item.number }}</h5>
+                                    {% else %}
+                                        <h5>Выпускной проект №{{ item.number }}</h5>
+                                    {% endif %}
+                                    <p>&laquo;{{ item.title }}&raquo;</p>
+                                </td>
+                            </tr>
+
+                    {% else %}
+                        <tr>
+                            <td class="text-left">
+                                <img class="start_image" src="/img/calendar.svg" alt="Ожидается">
+                            </td>
+                            <td>
+                                {% if item.is_homework %}
+                                    <h5>Домашняя работа №{{ item.number }}</h5>
+                                {% else %}
+                                    <h5>Выпускной проект №{{ item.number }}</h5>
+                                {% endif %}
+                                <p>&laquo;{{ item.title }}&raquo;</p>
+                            </td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
+
+{% block script %}
+    <script src="/js/jquery.countdown.min.js"></script>
+    <script type="text/javascript">
+        // 15 days from now!
+        function get15dayFromNow() {
+            return new Date(new Date().valueOf() + 2 * 24 * 60 * 60 * 1000);
+        }
+
+        var $clock = $('#clock');
+
+        $clock.countdown(get15dayFromNow(), function(event) {
+            $(this).html(event.strftime('%D день %H:%M:%S'));
+        });
+
+        $('#btn-reset').click(function() {
+            $clock.countdown(get15dayFromNow());
+        });
+
+    </script>
+{% endblock %}
