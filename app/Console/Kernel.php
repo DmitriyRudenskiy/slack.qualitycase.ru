@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Console\Commands\AutoFillFromSlack;
 use App\Console\Commands\ImportFromDirectMessage;
 use App\Console\Commands\ImportMembers;
 use App\Console\Commands\LoadMessage;
@@ -18,7 +19,8 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         ImportMembers::class,
         LoadMessage::class,
-        ImportFromDirectMessage::class
+        ImportFromDirectMessage::class,
+        AutoFillFromSlack::class
     ];
 
     /**
