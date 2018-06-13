@@ -20,8 +20,8 @@ class CreateMessagesTable extends Migration
             $table->text('description');
             $table->timestamp('added_on');
 
-            $table->foreign('channel_member_id')->references('id')->on('members');
-            $table->foreign('member_id')->references('id')->on('members');
+            //$table->foreign('channel_member_id')->references('id')->on('members');
+            //$table->foreign('member_id')->references('id')->on('members');
         });
     }
 
