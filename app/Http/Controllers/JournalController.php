@@ -25,6 +25,21 @@ class JournalController extends Controller
         );
     }
 
+    public function show($accessToken, Students $studentsRepository, Homeworks $homeworksRepository)
+    {
+        $students = $studentsRepository->orderBy('first_name')->get();
+        $homeworks = $homeworksRepository->where('course_id', 1)->orderBy('finish')->get();
+
+        return view(
+            'journal.show',
+            [
+                'students' => $students,
+                'homeworks' => $homeworks,
+                'accessToken' => env('ACCESS_TOKEN')
+            ]
+        );
+    }
+
     public function view($accessKey, Students $studentsRepository, Homeworks $homeworksRepository, Rating $ratingRepository)
     {
         $student = $studentsRepository->where('access_key', $accessKey)->first();
@@ -55,6 +70,8 @@ class JournalController extends Controller
             ]
         );
     }
+
+
 
     public function rating($accessToken, Request $request)
     {
