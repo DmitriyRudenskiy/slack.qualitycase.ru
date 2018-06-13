@@ -43,7 +43,10 @@
         </div>
 
     <div class="row">
-        <div class="col-lg-2"></div>
+        <div class="col-lg-2">
+
+            {{ next.id }}
+        </div>
         <div class="col-lg-8">
             <table class="table">
                 <tbody>
@@ -79,6 +82,22 @@
                                 </td>
                             </tr>
 
+                    {% elseif item.id == next.id and item.rating < 1 %}
+                        <tr>
+                            <td class="text-left">
+                                <div class="panel-body">
+                                    <div class="lead" id="clock"></div>
+                                </div>
+                            </td>
+                            <td>
+                                {% if item.is_homework %}
+                                    <h5>Домашняя работа №{{ item.number }}</h5>
+                                {% else %}
+                                    <h5>Выпускной проект №{{ item.number }}</h5>
+                                {% endif %}
+                                <p>&laquo;{{ item.title }}&raquo;</p>
+                            </td>
+                        </tr>
                     {% else %}
                         <tr>
                             <td class="text-left">
@@ -104,20 +123,8 @@
 {% block script %}
     <script src="/js/jquery.countdown.min.js"></script>
     <script type="text/javascript">
-        // 15 days from now!
-        function get15dayFromNow() {
-            return new Date(new Date().valueOf() + 2 * 24 * 60 * 60 * 1000);
-        }
-
-        var $clock = $('#clock');
-
-        $clock.countdown(get15dayFromNow(), function(event) {
+        $('#clock').countdown(new Date('{{ next.finish }}T00:00:00'), function(event) {
             $(this).html(event.strftime('%D день %H:%M:%S'));
         });
-
-        $('#btn-reset').click(function() {
-            $clock.countdown(get15dayFromNow());
-        });
-
     </script>
 {% endblock %}

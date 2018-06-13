@@ -6,6 +6,7 @@ use App\Models\Rating;
 use App\Models\Students;
 use Illuminate\Routing\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class JournalController extends Controller
 {
@@ -28,7 +29,11 @@ class JournalController extends Controller
     {
         $student = $studentsRepository->where('access_key', $accessKey)->first();
 
-        $sql = "SELECT h.is_homework, h.number, h.title, hs.rating, (h.finish > NOW()) is_finish
+        if ($student === null) {
+            throw new NotFoundHttpException();
+        }
+
+        $sql = "SELECT h.id, h.is_homework, h.number, h.title, hs.rating, (h.finish > NOW()) is_finish
         FROM homeworks h
         LEFT JOIN homeworks_to_students hs ON hs.homework_id=h.id AND hs.student_id=?
         WHERE 1
@@ -38,12 +43,15 @@ class JournalController extends Controller
 
         $ready = $ratingRepository->where('student_id', $student->id)->count();
 
+        $next = $homeworksRepository->whereRaw('finish > NOW()')->orderBy('finish')->first();
+
         return view(
             'journal.view',
             [
                 'student' => $student,
                 'homeworks' => $homeworks,
-                'ready' => $ready
+                'ready' => $ready,
+                'next' => $next
             ]
         );
     }
