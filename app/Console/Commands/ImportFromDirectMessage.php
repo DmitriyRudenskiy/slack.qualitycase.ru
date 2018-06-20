@@ -6,6 +6,7 @@ use App\Components\Slack\Client;
 use App\Models\Channels;
 use App\Models\Members;
 use App\Models\Messages;
+use App\Models\Students;
 use Illuminate\Console\Command;
 use InvalidArgumentException;
 
@@ -27,9 +28,9 @@ class ImportFromDirectMessage extends Command
      */
     public function handle()
     {
-        $members = Members::where("is_master", false)->get();
+        $students = Students::where("is_master", false)->get();
 
-        foreach ($members as $value) {
+        foreach ($students as $value) {
             $this->getMessages($value);
         }
 
@@ -37,9 +38,9 @@ class ImportFromDirectMessage extends Command
     }
 
     /**
-     * @param Members $members
+     * @param Students $members
      */
-    protected function getMessages(Members $members)
+    protected function getMessages(Students $members)
     {
         $this->info("Load message for user: " . $members->name);
 
@@ -94,7 +95,7 @@ class ImportFromDirectMessage extends Command
             return $this->users[$slackId];
         }
 
-        $member = Members::where("slack_id", $slackId)->first();
+        $member = Students::where("slack_id", $slackId)->first();
 
         if ($member === null) {
             $this->error("Not find for: " . $slackId);

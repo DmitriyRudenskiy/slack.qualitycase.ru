@@ -24,9 +24,9 @@
 
                 {% for item in users %}
                     {% if item.id == user.id %}
-                        <a href="#" class="list-group-item list-group-item-action active">{{ item.name }}</a>
+                        <a href="#" class="list-group-item list-group-item-action active">{{ item.first_name }} {{ item.last_name }}</a>
                     {% else %}
-                        <a href="{{ route('view', {'accessToken': accessToken, 'userId': item.id}) }}" class="list-group-item list-group-item-action">{{ item.name }}</a>
+                        <a href="{{ route('view', {'accessToken': accessToken, 'userId': item.id}) }}" class="list-group-item list-group-item-action">{{ item.first_name }} {{ item.last_name }}</a>
                     {% endif %}
                 {% endfor %}
             </div>

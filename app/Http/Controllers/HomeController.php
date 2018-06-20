@@ -3,14 +3,15 @@ namespace App\Http\Controllers;
 
 use App\Models\Members;
 use App\Models\Messages;
+use App\Models\Students;
 use Illuminate\Routing\Controller;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class HomeController extends Controller
 {
-    public function index(Members $members)
+    public function index(Students $studentsRepository)
     {
-        $users = $members->where("is_master", false)->get();
+        $users = $studentsRepository->where("is_master", false)->get();
 
         return view(
             'home.index',
@@ -21,9 +22,9 @@ class HomeController extends Controller
         );
     }
 
-    public function view($accessToken, $userId, Members $members, Messages $messages)
+    public function view($accessToken, $userId, Students $studentsRepository, Messages $messages)
     {
-        $user = $members->where("id", $userId)
+        $user = $studentsRepository->where("id", $userId)
             ->where("is_master", false)
             ->first();
 
@@ -32,11 +33,13 @@ class HomeController extends Controller
         }
 
         // список пользователей
-        $users = $members->where("is_master", false)->get();
+        $users = $studentsRepository->where("is_master", false)->get();
+
+        $master = $studentsRepository->where("is_master", true)->first();
 
         // список сообщений
         $message = $messages
-            ->with("member")
+            ->with("students")
             ->where("channel_member_id", $user->id)
             ->orderBy("added_on")
             ->paginate(5);
@@ -47,6 +50,7 @@ class HomeController extends Controller
                 'user' => $user,
                 'users' => $users,
                 'message' => $message,
+                'master' => $master,
                 'accessToken' => env('ACCESS_TOKEN')
             ]
         );

@@ -74,8 +74,9 @@ class Client
         $json = json_decode($content);
 
         if (empty($json->messages)) {
-            $this->error(__METHOD__);
-            dd($url);
+            echo __METHOD__, PHP_EOL;
+            echo 'Error (empty message) for url:', $url , PHP_EOL;
+            var_dump($json);
         }
 
         return $json->messages;

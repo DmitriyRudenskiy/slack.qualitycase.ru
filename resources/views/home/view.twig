@@ -20,13 +20,13 @@
     </nav>
 
     {% for item in message %}
-        {% if item.member.is_master %}
-            <p style="margin: 0; padding: 0; line-height: 1;">{{ item.member.name }} <span class="__message_date">{{ item.added_on | date("H:i d.m.y")}}</span></p>
+        {% if item.member_id == master.id %}
+            <p style="margin: 0; padding: 0; line-height: 1;">{{ master.first_name }} {{ master.last_name }} <span class="__message_date">{{ item.added_on | date("H:i d.m.y")}}</span></p>
             <div class="alert alert-primary" role="alert" style="margin-right: 20%">
                 <p>{{ item.description }}</p>
             </div>
-        {% else %}
-            <p class="text-right" style="margin: 0; padding: 0; line-height: 1;">{{ item.member.name }} <span class="__message_date">{{ item.added_on | date("H:i d.m.y")}}</span></p>
+        {% elseif (item.member_id == user.id) %}
+            <p class="text-right" style="margin: 0; padding: 0; line-height: 1;">{{ user.first_name }} {{ user.last_name }} <span class="__message_date">{{ item.added_on | date("H:i d.m.y")}}</span></p>
             <div class="alert alert-success" role="alert" style="margin-left: 20%">
                 <p>{{ item.description }}</p>
             </div>

@@ -18,6 +18,11 @@ class Messages extends Model
     {
         return $this->belongsTo(Members::class, 'member_id');
     }
+
+    public function students()
+    {
+        return $this->belongsTo(Students::class, 'member_id');
+    }
 }
 
 
