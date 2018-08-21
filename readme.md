@@ -1,3 +1,10 @@
+# Задачи
+- Добавить таблицу курсов
+-- id
+-- title
+-- chanel_name
+-- api_key
+
 # Запуск сервера
 docker start work-mysql
 docker run -it \
